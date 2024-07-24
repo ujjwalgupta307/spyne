@@ -1,0 +1,46 @@
+version: '3'
+services:
+  users:
+    build: .
+    ports:
+      - "5001:5000"
+    environment:
+      - DATABASE_URL=sqlite:///db.sqlite3
+      - SECRET_KEY=mysecret
+      - JWT_SECRET_KEY=myjwtsecret
+    volumes:
+      - .:/app
+  discussions:
+    build: .
+    ports:
+      - "5002:5000"
+    environment:
+      - DATABASE_URL=sqlite:///db.sqlite3
+      - SECRET_KEY=mysecret
+      - JWT_SECRET_KEY=myjwtsecret
+    volumes:
+      - .:/app
+  auth:
+    build: .
+    ports:
+      - "5003:5000"
+    environment:
+      - DATABASE_URL=sqlite:///db.sqlite3
+      - SECRET_KEY=mysecret
+      - JWT_SECRET_KEY=myjwtsecret
+    volumes:
+      - .:/app
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
